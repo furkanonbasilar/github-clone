@@ -7,6 +7,7 @@ import "./App.scss";
 import Repos from "components/Options/Repos";
 import UserRepos from "components/Options/UserRepos";
 import Bookmarks from "components/Options/Bookmarks";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   setSearch,
   setSelected,
@@ -17,6 +18,7 @@ import { fetchValidData } from "redux/repos/action";
 
 const App = ({
   pageCount,
+  loading,
   optionValue,
   searchVal,
   setSearch,
@@ -39,7 +41,6 @@ const App = ({
       }
     }
   };
-  console.log(pageCount);
   return (
     <div className="container">
       <Grid container>
@@ -78,17 +79,27 @@ const App = ({
           </Select>
         </Grid>
       </Grid>
-      <div className="repos-wrapper">{renderOptions(optionValue)}</div>
-      {pageCount ? (
-        <Pagination
-          page={pageNumber}
-          count={Math.ceil(pageCount / 10)}
-          onChange={(event, page) => {
-            setPageNumber(page);
-            fetchValidData();
-          }}
-        />
-      ) : null}
+      {loading ? (
+        <CircularProgress className="spinner" />
+      ) : (
+        <>
+          <div className="repos-wrapper">{renderOptions(optionValue)}</div>
+          {optionValue !== "BookmarkedRepos" ? (
+            pageCount ? (
+              <Pagination
+                page={pageNumber}
+                count={Math.ceil(pageCount / 10)}
+                onChange={(event, page) => {
+                  setPageNumber(page);
+                  fetchValidData();
+                }}
+              />
+            ) : (
+              <div className="no-items">NO ITEMS FOUND</div>
+            )
+          ) : null}
+        </>
+      )}
     </div>
   );
 };
@@ -103,6 +114,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = state => {
   return {
+    loading: state.repos.loading,
     optionValue: state.appState.optionValue,
     searchVal: state.appState.searchVal,
     pageCount: state.repos.pageCount,

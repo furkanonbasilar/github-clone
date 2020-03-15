@@ -1,15 +1,11 @@
 import * as TYPES from "./actionTypes";
 
-const bookmarkTags = {
-  android: [],
-  angular: [],
-  artIntel: [],
-  intresting: [],
-  react: [],
-  all: []
+const initialState = {
+  repos: [],
+  bookmarks: [],
+  pageCount: null,
+  loading: false
 };
-
-const initialState = { repos: [], bookmarks: [bookmarkTags], pageCount: null };
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -19,13 +15,11 @@ export default (state = initialState, action) => {
       });
     }
     case TYPES.GET_REPOS_BY_NAME: {
-      console.log(action.repos);
       return Object.assign({}, state, {
         repos: [...action.repos]
       });
     }
     case TYPES.GET_TOTAL_COUNT_REPOS: {
-      console.log(action.pageCount);
       return Object.assign({}, state, {
         pageCount: action.pageCount
       });
@@ -35,17 +29,69 @@ export default (state = initialState, action) => {
         pageCount: null
       });
     }
+
     case TYPES.ADD_REPO_TO_BOOKMARKS: {
-      const temp = state.bookmarks[0][action.key];
       return Object.assign({}, state, {
-        repos: [...state.repos],
         bookmarks: [
-          {
-            ...state.bookmarks[0],
-            [action.key]: [...temp, action.value],
-            all: [...state.bookmarks[0].all, action.value]
-          }
+          ...state.bookmarks,
+          { repoData: action.repoData, categories: [action.category] }
         ]
+      });
+    }
+    case TYPES.REMOVE_REPO_FROM_BOOKMARKS: {
+      const delRepoIndex = state.bookmarks.findIndex(
+        x => x.repoData.id === action.id
+      );
+
+      return Object.assign({}, state, {
+        bookmarks: [
+          ...state.bookmarks.slice(0, delRepoIndex),
+          ...state.bookmarks.slice(delRepoIndex + 1)
+        ]
+      });
+    }
+    case TYPES.ADD_CATEGORY: {
+      const foundRepo = state.bookmarks.find(x => x.repoData.id === action.id);
+      const foundRepoInd = state.bookmarks.findIndex(
+        x => x.repoData.id === action.id
+      );
+
+      return Object.assign({}, state, {
+        bookmarks: [
+          ...state.bookmarks.slice(0, foundRepoInd),
+          {
+            ...foundRepo,
+            categories: [...foundRepo.categories, action.category]
+          },
+          ...state.bookmarks.slice(foundRepoInd + 1)
+        ]
+      });
+    }
+    case TYPES.REMOVE_CATEGORY: {
+      const foundRepo = state.bookmarks.find(x => x.repoData.id === action.id);
+      foundRepo.categories = foundRepo.categories.filter(
+        x => x !== action.category
+      );
+      const foundRepoInd = state.bookmarks.findIndex(
+        x => x.repoData.id === action.id
+      );
+
+      return Object.assign({}, state, {
+        bookmarks: [
+          ...state.bookmarks.slice(0, foundRepoInd),
+          foundRepo,
+          ...state.bookmarks.slice(foundRepoInd + 1)
+        ]
+      });
+    }
+    case TYPES.SHOW_LOADER: {
+      return Object.assign({}, state, {
+        loading: true
+      });
+    }
+    case TYPES.HIDE_LOADER: {
+      return Object.assign({}, state, {
+        loading: false
       });
     }
     default:
