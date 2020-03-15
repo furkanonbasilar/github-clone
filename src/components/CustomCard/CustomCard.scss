@@ -1,0 +1,49 @@
+.custom-card {
+  position: relative;
+  border: 1px solid #dadce0;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.141), 0 1px 3px 0 rgba(0, 0, 0, 0.122);
+  margin: 50px 0;
+  padding: 20px;
+
+  .card-name {
+    margin-top: 0;
+    font-size: 20px;
+    color: #2266d2;
+  }
+  .card-description {
+    font-size: 15px;
+    width: 100%;
+    height: 50px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .card-stars {
+    display: inline;
+    color: #4f545d;
+  }
+  .card-language {
+    display: inline;
+  }
+  .fa-bookmark {
+    border-radius: 5px;
+    border: 1px solid #c8c7c8;
+    padding: 8px;
+    font-size: 20px;
+    position: absolute;
+    cursor: pointer;
+    right: 20px;
+    top: 20px;
+  }
+}
+.MuiFormControlLabel-root {
+  display: block !important;
+  margin-left: 0 !important;
+}
+
+.MuiFormControlLabel-root {
+  &:focus {
+    outline: none;
+  }
+}

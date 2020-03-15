@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+}
+
+.container {
+  width: 1000px;
+  margin: auto;
+  margin-top: 100px;
+}
+.search-button {
+  margin-left: 10px !important;
+  padding: 5px 5px 2px 5px !important;
+}
+
+.MuiPagination-root {
+  display: flex;
+  justify-content: center;
+}
+
+.repos-wrapper {
+  min-height: calc(100vh - 170px);
+}
+
+.optional-input-col {
+  display: flex;
+  justify-content: flex-end;
+}
