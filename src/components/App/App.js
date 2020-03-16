@@ -94,9 +94,8 @@ const App = ({
                   fetchValidData();
                 }}
               />
-            ) : (
-              <div className="no-items">NO ITEMS FOUND</div>
-            )
+            ) : 
+              null 
           ) : null}
         </>
       )}
